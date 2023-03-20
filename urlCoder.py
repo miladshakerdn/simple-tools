@@ -1,5 +1,5 @@
 # Description:
-# This script is used to decode/enconde url.
+# This script is used to decode url.
 # Usage: python urlCoder.py <url> <e/d>
 # we try to do it without use library like urllib
 
@@ -7,10 +7,9 @@
 # Lindin: https://www.linkedin.com/in/milad-shaker-ba7ab6141/
 # Github: https://github.com/miladshakerdn/simple-tools
 
-
 import re
 
-# decode url without use urllib
+# decode url without use library
 def url_decode(s):
     ''' Decode a URL encoded string.
     >>> url_decode('abc%20def')
@@ -31,6 +30,28 @@ def url_decode(s):
             i += 1
     return r
 
+# url encode without use library
+def url_encode(url):
+    ''' Encode a URL string.
+    >>> url_encode('abc def')
+    '''
+    res = ''
+    protocol = ''
+    pattern = r"(?::\/\/((?:[^\/]*\/)*(?:[^\/]*)))"
+    match = re.search(pattern, url)
+    if match:
+        protocol = url.split(match.group(1))[0]
+        url = match.group(1)
+    for c in url:
+        if c.isalnum():
+            res += c
+        else:
+            res += '%%%02X' % ord(c)
+    return protocol + res
+
+###############################################
+## clone urllib algoritm
+###############################################
 # clone unquote to bytes with urllib algoritm
 def unquote_to_bytes(string):
     _hexdig = '0123456789ABCDEFabcdef'
@@ -75,6 +96,11 @@ def url_decode_urllib_algoritm(url, encoding='utf-8', errors='replace'):
     return ''.join(res)
 
 
-url = 'https://www.google.com/search?client=firefox-b-d&q=%D8%AA%D8%B3%D8%AA+%D9%85%D8%B1%D9%88%D8%B1%DA%AF%D8%B1+firefox'
+url = 'https://www.google.com/fdfb fsv https://'
 if  __name__ == '__main__':
-    print(url_decode(url))
+    print(url_encode(url))
+    # now we have bad output
+    # https://www%2Egoogle%2Ecom%2Ffdfb%20fsv%20https%3A%2F%2F
+    # good output is:
+    # https://www.google.com/fdfb%20fsv%20https%3A%2F%2F
+    # fix it after
