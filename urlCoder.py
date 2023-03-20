@@ -31,7 +31,7 @@ def url_decode(s):
             i += 1
     return r
 
-# unquote to bytes with urllib algoritm
+# clone unquote to bytes with urllib algoritm
 def unquote_to_bytes(string):
     _hexdig = '0123456789ABCDEFabcdef'
     _hextobyte = None
@@ -63,7 +63,7 @@ def unquote_to_bytes(string):
             append(item)
     return b''.join(res)
 
-# decode url with urllib algoritm
+# clone decode url with urllib algoritm
 def url_decode_urllib_algoritm(url, encoding='utf-8', errors='replace'):
     _asciire = re.compile('([\x00-\x7f]+)')
     bits = _asciire.split(url)
