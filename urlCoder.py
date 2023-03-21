@@ -1,6 +1,11 @@
 # Description:
 # This script is used to decode url.
-# Usage: python urlCoder.py <url> <e/d>
+
+## Usage: 
+## python urlCoder.py
+## Enter url and choose encode (e) or decode (d), If you don\'t enter anything default is decode.
+## Then enter url and press enter to see result.
+
 # We try to do it without use library like urllib
 # In this app we clone urllib algoritm to decode url, Bot we don't use this algoritm to encode url
 # just for fun :D and see the difference between urllib and our algoritm
@@ -108,6 +113,13 @@ def url_decode_urllib_algoritm(url, encoding='utf-8', errors='replace'):
 
 # url encode/decode app
 if  __name__ == '__main__':
+    from sys import argv
+    if len(argv) == 2 and argv[1] == '-h':
+        print('Usage: python urlCoder.py\n',
+              'Enter url and choose encode (e) or decode (d)\n',
+              'If you don\'t enter anything default is decode.\n',
+              'Then enter url and press enter to see result.')
+        exit()
     todo = input('Do you want to encode or decode url? (e/d): ')
     # if argv is not set default is decode
     todo = todo if (todo == 'd' or todo == 'e') else 'd'
