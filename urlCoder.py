@@ -1,7 +1,9 @@
 # Description:
 # This script is used to decode url.
 # Usage: python urlCoder.py <url> <e/d>
-# we try to do it without use library like urllib
+# We try to do it without use library like urllib
+# In this app we clone urllib algoritm to decode url, Bot we don't use this algoritm to encode url
+# just for fun :D and see the difference between urllib and our algoritm
 
 # Author: Milad Shaker
 # Lindin: https://www.linkedin.com/in/milad-shaker-ba7ab6141/
@@ -36,18 +38,27 @@ def url_encode(url):
     >>> url_encode('abc def')
     '''
     res = ''
-    protocol = ''
-    pattern = r"(?::\/\/((?:[^\/]*\/)*(?:[^\/]*)))"
+    base_url = ''
+    # pattern = r"(?::\/\/((?:[^\/]*\/)*(?:[^\/]*)))" # this pattern is not good
+    pattern = r"(:\/\/[^\/]+\/)((?:[^\/]*\/)*(?:[^\/]*))"
     match = re.search(pattern, url)
-    if match:
-        protocol = url.split(match.group(1))[0]
-        url = match.group(1)
-    for c in url:
-        if c.isalnum():
-            res += c
-        else:
-            res += '%%%02X' % ord(c)
-    return protocol + res
+    if match and match.group(2):
+        base_url = url.split(match.group(1))[0] + match.group(1)
+        url = match.group(2)
+        for c in url:
+            if c.isalnum():
+                res += c
+            else:
+                res += '%%%02X' % ord(c)
+    elif match and match.group(1):
+        base_url = url.split(match.group(1))[0] + match.group(1)
+    else:
+        for c in url:
+            if c.isalnum():
+                res += c
+            else:
+                res += '%%%02X' % ord(c)
+    return base_url + res
 
 ###############################################
 ## clone urllib algoritm
@@ -95,12 +106,12 @@ def url_decode_urllib_algoritm(url, encoding='utf-8', errors='replace'):
         append(bits[i + 1])
     return ''.join(res)
 
-
-url = 'https://www.google.com/fdfb fsv https://'
+# url encode/decode app
 if  __name__ == '__main__':
-    print(url_encode(url))
-    # now we have bad output
-    # https://www%2Egoogle%2Ecom%2Ffdfb%20fsv%20https%3A%2F%2F
-    # good output is:
-    # https://www.google.com/fdfb%20fsv%20https%3A%2F%2F
-    # fix it after
+    todo = input('Do you want to encode or decode url? (e/d): ')
+    # if argv is not set default is decode
+    todo = todo if (todo == 'd' or todo == 'e') else 'd'
+    url = input('Enter url: ')
+
+    res = url_encode(url) if todo == 'e' else url_decode(url)
+    print(res)
